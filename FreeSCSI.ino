@@ -54,6 +54,16 @@
 // HDD format
 #define MAX_BLOCKSIZE 1024     // 最大BLOCKサイズ
 
+/* 
+ * Default SCSI Identifiers
+ * These will be used unless a specific board has been detected
+ * or specified in the SD filesystem.
+ * Values past the max length will be truncated.
+ */ 
+#define DEFAULT_VID "FreeSCSI" // Max length 8 characters
+#define DEFAULT_PID "Generic SCSI" // Max length 16 characters
+#define DEFAULT_REV "0001" // Max length 4 characters
+
 // SDFAT
 #define SD1_CONFIG SdSpiConfig(PA4, DEDICATED_SPI, SD_SCK_MHZ(SPI_FULL_SPEED), &SPI)
 SdFs SD;
