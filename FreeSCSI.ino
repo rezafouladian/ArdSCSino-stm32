@@ -279,9 +279,9 @@ bool hddimageOpen(HDDIMG *h,const char *image_name,int id,int lun,int blocksize)
     Serial.print("Imagefile:");
     Serial.print(h->m_file.name() );
 #endif
-    if(h->m_fileSize>0)
+    if (h->m_fileSize > 0)
     {
-      // check blocksize dummy file
+// check blocksize dummy file
 #if DEBUG
       Serial.print(" / ");
       Serial.print(h->m_fileSize);
