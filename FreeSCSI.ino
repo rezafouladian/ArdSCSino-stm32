@@ -705,9 +705,9 @@ byte onInquiryCommand(byte len)
     35 - 4, //追加データ長
     0, 0, //Reserve
     0x00, //サポート機能
-    'N', 'E', 'C', 'I', 'T', 'S', 'U', ' ',
-    'A', 'r', 'd', 'S', 'C', 'S', 'i', 'n', 'o', ' ', ' ',' ', ' ', ' ', ' ', ' ',
-    '0', '0', '1', '0',
+    'N', 'E', 'C', 'I', 'T', 'S', 'U', ' ', // Vendor ID
+    'A', 'r', 'd', 'S', 'C', 'S', 'i', 'n', 'o', ' ', ' ',' ', ' ', ' ', ' ', ' ', // Product ID
+    '0', '0', '1', '0', // Revision level
   };
   writeDataPhase(len < 36 ? len : 36, buf);
   return 0x00;
