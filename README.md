@@ -9,3 +9,10 @@ ArdSCSino とは SCSIデバイス（ハードディスク）を arduino で再�
 # Getting started
 
 # Hardware versions
+## STM32
+Blue Pill - Coming Soon <br>
+SparkFun MicroMod STM32 - Coming Soon
+## RP2040/Pi Pico
+Pi Pico - Coming Soon
+RP2040 - Coming Soon
+SparkFun MicroMod RP2040 - Coming Soon
