@@ -1199,9 +1199,9 @@ void loop()
   }
 
   LOG("Command:");
-  SCSI_OUT(vMSG,inactive) // gpio_write(MSG, low);
-  SCSI_OUT(vCD ,  active) // gpio_write(CD, high);
-  SCSI_OUT(vIO ,inactive) // gpio_write(IO, low);
+  SCSI_OUT(vMSG,inactive)
+  SCSI_OUT(vCD ,  active)
+  SCSI_OUT(vIO ,inactive)
 
   int len;
   byte cmd[12];
