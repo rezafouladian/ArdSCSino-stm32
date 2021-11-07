@@ -203,7 +203,7 @@ byte          m_msb[256];
  *  データバイト to BSRRレジスタ設定値、兼パリティーテーブル
 */
 
-// パリティービット生成
+// Parity Bit Generation
 #define PTY(V)   (1^((V)^((V)>>1)^((V)>>2)^((V)>>3)^((V)>>4)^((V)>>5)^((V)>>6)^((V)>>7))&1)
 
 // データバイト to BSRRレジスタ設定値変換テーブル
@@ -233,7 +233,7 @@ static const uint32_t db_bsrr[256]={
 //#undef PTY
 
 #if USE_DB2ID_TABLE
-/* DB to SCSI-ID 変換テーブル */
+/* DB to SCSI-ID Conversion */
 static const byte db2scsiid[256]={
   0xff,
   0,
@@ -838,7 +838,7 @@ void onRequestSenseCommand(byte len)
  */
 byte onReadCapacityCommand(byte pmi)
 {
-  if(!m_img) return 0x02; // イメージファイル不在
+  if(!m_img) return 0x02; // No image file
   
   uint32_t bl = m_img->m_blocksize;
   uint32_t bc = m_img->m_fileSize / bl;
@@ -859,7 +859,7 @@ byte onReadCommand(uint32_t adds, uint32_t len)
   LOGHEXN(adds);
   LOGHEXN(len);
 
-  if(!m_img) return 0x02; // イメージファイル不在
+  if(!m_img) return 0x02; // No image file
 
   gpio_write(LED, high);
   writeDataPhaseSD(adds, len);
@@ -876,7 +876,7 @@ byte onWriteCommand(uint32_t adds, uint32_t len)
   LOGHEXN(adds);
   LOGHEXN(len);
   
-  if(!m_img) return 0x02; // イメージファイル不在
+  if(!m_img) return 0x02; // No image file
   
   gpio_write(LED, high);
   readDataPhaseSD(adds, len);
@@ -890,11 +890,11 @@ byte onWriteCommand(uint32_t adds, uint32_t len)
 #if SCSI_SELECT == 2
 byte onModeSenseCommand(byte dbd, int cmd2, uint32_t len)
 {
-  if(!m_img) return 0x02; // イメージファイル不在
+  if(!m_img) return 0x02; // No image file
 
   int pageCode = cmd2 & 0x3F;
 
-  // デフォルト設定としてセクタサイズ512,セクタ数25,ヘッド数8を想定
+  // Assuming sector size 512, 25 sectors, 8 heads
   int size = m_img->m_fileSize;
   int cylinders = (int)(size >> 9);
   cylinders >>= 3;
@@ -902,13 +902,13 @@ byte onModeSenseCommand(byte dbd, int cmd2, uint32_t len)
   int sectorsize = 512;
   int sectors = 25;
   int heads = 8;
-  // セクタサイズ
+  // Sector size
  int disksize = 0;
   for(disksize = 16; disksize > 0; --(disksize)) {
     if ((1 << disksize) == sectorsize)
       break;
   }
-  // ブロック数
+  // Number of blocks
   uint32_t diskblocks = (uint32_t)(size >> disksize);
   memset(m_buf, 0, sizeof(m_buf)); 
   int a = 4;
@@ -916,9 +916,9 @@ byte onModeSenseCommand(byte dbd, int cmd2, uint32_t len)
     uint32_t bl = m_img->m_blocksize;
     uint32_t bc = m_img->m_fileSize / bl;
     byte c[8] = {
-      0,//デンシティコード
+      0,// Density
       bc >> 16, bc >> 8, bc,
-      0, //Reserve
+      0, // Reserved
       bl >> 16, bl >> 8, bl
     };
     memcpy(&m_buf[4], c, 8);
@@ -932,7 +932,7 @@ byte onModeSenseCommand(byte dbd, int cmd2, uint32_t len)
     m_buf[a + 1] = 0x06;
     a += 8;
   }
-  case 0x03:  //ドライブパラメータ
+  case 0x03:  // Drive Parameters
   {
     m_buf[a + 0] = 0x80 | 0x03; //ページコード
     m_buf[a + 1] = 0x16; // ページ長
@@ -948,7 +948,7 @@ byte onModeSenseCommand(byte dbd, int cmd2, uint32_t len)
       break;
     }
   }
-  case 0x04:  //ドライブパラメータ
+  case 0x04:  // Drive Parameters
   {
       LOGN("AddDrive");
       m_buf[a + 0] = 0x04; //ページコード
@@ -972,7 +972,7 @@ byte onModeSenseCommand(byte dbd, int cmd2, uint32_t len)
 #else
 byte onModeSenseCommand(byte dbd, int cmd2, uint32_t len)
 {
-  if(!m_img) return 0x02; // イメージファイル不在
+  if(!m_img) return 0x02; // No image file
 
   memset(m_buf, 0, sizeof(m_buf));
   int pageCode = cmd2 & 0x3F;
@@ -982,9 +982,9 @@ byte onModeSenseCommand(byte dbd, int cmd2, uint32_t len)
     uint32_t bc = m_img->m_fileSize / bl;
 
     byte c[8] = {
-      0,//デンシティコード
+      0,// Density
       bc >> 16, bc >> 8, bc,
-      0, //Reserve
+      0, // Reserved
       bl >> 16, bl >> 8, bl    
     };
     memcpy(&m_buf[4], c, 8);
@@ -993,7 +993,7 @@ byte onModeSenseCommand(byte dbd, int cmd2, uint32_t len)
   }
   switch(pageCode) {
   case 0x3F:
-  case 0x03:  //ドライブパラメータ
+  case 0x03:  // Drive Parameters
     m_buf[a + 0] = 0x03; //ページコード
     m_buf[a + 1] = 0x16; // ページ長
     m_buf[a + 11] = 0x3F;//セクタ数/トラック
@@ -1001,7 +1001,7 @@ byte onModeSenseCommand(byte dbd, int cmd2, uint32_t len)
     if(pageCode != 0x3F) {
       break;
     }
-  case 0x04:  //ドライブパラメータ
+  case 0x04:  // Drive Parameters
     {
       uint32_t bc = m_img->m_fileSize / m_img->m_file;
       m_buf[a + 0] = 0x04; //ページコード
@@ -1105,7 +1105,7 @@ void MsgOut2()
 }
 
 /*
- * メインループ.
+ * Main Loop
  */
 void loop() 
 {
