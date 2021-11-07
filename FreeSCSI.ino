@@ -729,13 +729,14 @@ byte onInquiryCommand(byte len)
 #else
 byte onInquiryCommand(byte len)
 {
-  byte buf[36] = {
+  byte buf[181] = {
     /* 
      * Peripheral Device Type and Qualifier
      * 
      * Bits 0-4: Peripheral Device Type
      * 00h = Direct access block device
      * 05h = CD/DVD device
+     * See SCSI documentation for full listing
      * 
      * Bits 5-7: Peripheral Qualifier
      * 000b = Device connected
@@ -765,14 +766,13 @@ byte onInquiryCommand(byte len)
      * Bit 5: NORMACA
      * Bits 6-7: Obselete
      */
-    0x01,
+    0b00000001,
 
     /*
      * Additional Length
      * Specifies the length in bytes of the remaining inquiry data.
-     * 
      */
-    31,
+    177,
 
     /*
      * Bit 0: Protect
@@ -801,9 +801,33 @@ byte onInquiryCommand(byte len)
     0x00, //サポート機能
 
     // Vendor and Device IDs
-    'T', 'N', 'B', ' ', ' ', ' ', ' ', ' ',
+    'F', 'r', 'e', 'e', 'S', 'C', 'S', 'I',
     'A', 'r', 'd', 'S', 'C', 'S', 'i', 'n', 'o', ' ', ' ',' ', ' ', ' ', ' ', ' ',
-    '0', '0', '1', '0',
+    '0', '0', '0', '1',
+
+    // Drive serial bytes 36-43
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    
+    // Vendor bytes 44-55
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+
+    // Reserved byte 57
+    0x00,
+
+    // Vendor descriptor bytes 58-73
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+
+    // Reserved bytes 74-95
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+
+    // Vendor specific copyright bytes 96-?
+    // 86 bytes to byte 181 end
+    'F', 'r', 'e', 'e', 'S', 'C', 'S', 'I', ' ', 'C', 'o' 'p', 'y', 'r', 'i', 'g', 'h', 't', ' ',
+    '(', 'c', ')', ' ', '2', '0', '2', '1', ' ', 'R', 'e', 'z', 'a', ' ', 'F', 'o', 'u', 'l', 'a',
+    'd', 'i', 'a', 'n', ',', ' ', 'A', 'r', 'd', 'S', 'C', 'S', 'i', 'n','o', '-', 's', 't', 'm',
+    '3', '2', ' ', 'C', 'o', 'p', 'y', 'r', 'i', 'g', 'h', 't', ' ', '(', 'c', ')', ' ', '2', '0',
+    '1', '9', ' ', 'k', 'o', 'm', 'a', 't', 's', 'u',
   };
   writeDataPhase(len < 36 ? len : 36, buf);
   return 0x00;
