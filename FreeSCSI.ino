@@ -730,13 +730,77 @@ byte onInquiryCommand(byte len)
 byte onInquiryCommand(byte len)
 {
   byte buf[36] = {
-    0x00, //デバイスタイプ
-    0x00, //RMB = 0
-    0x01, //ISO,ECMA,ANSIバージョン
-    0x01, //レスポンスデータ形式
-    35 - 4, //追加データ長
-    0, 0, //Reserve
+    /* 
+     * Peripheral Device Type and Qualifier
+     * 
+     * Bits 0-4: Peripheral Device Type
+     * 00h = Direct access block device
+     * 05h = CD/DVD device
+     * 
+     * Bits 5-7: Peripheral Qualifier
+     * 000b = Device connected
+     * 001b = Device not connected but capable
+     */ 
+    0x00,
+
+    /*
+     * Removable Media bit
+     * 
+     * 00h = Not removable
+     * 80h = Removable
+     */
+    0x00,
+
+    /* 
+     * Version - Specifies device conformance
+     * 
+     * 00h = No conformance standard
+     * 01h = Obsolete (SCSI=001b)
+     */
+    0x01,
+
+    /*
+     * Bits 0-3: Response Data Format
+     * Bit 4: HISUP
+     * Bit 5: NORMACA
+     * Bits 6-7: Obselete
+     */
+    0x01,
+
+    /*
+     * Additional Length
+     * Specifies the length in bytes of the remaining inquiry data.
+     * 
+     */
+    31,
+
+    /*
+     * Bit 0: Protect
+     * Bits 1-2: Reserved
+     * Bit 3: 3PC
+     * Bits 4-5: TPGS
+     * Bit 6: ACC
+     * Bit 7: SCCS
+     */
+    0b00000000, 
+
+    /* 
+     * Bits 0-3: Obselete
+     * Bit 4: MULTIP
+     * Bit 5: VS
+     * Bit 6: ENCSERV
+     * Bit 7: Obselete
+     */
+    0b00000000,
+
+    /* 
+     * Bits 0: VS
+     * Bit 1: CMDQUE
+     * Bits 2-7: Obselete
+     */
     0x00, //サポート機能
+
+    // Vendor and Device IDs
     'T', 'N', 'B', ' ', ' ', ' ', ' ', ' ',
     'A', 'r', 'd', 'S', 'C', 'S', 'i', 'n', 'o', ' ', ' ',' ', ' ', ' ', ' ', ' ',
     '0', '0', '1', '0',
