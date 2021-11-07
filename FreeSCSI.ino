@@ -815,11 +815,11 @@ byte onInquiryCommand(byte len)
  */
 void onRequestSenseCommand(byte len)
 {
-  /*
-  * Request Sense
-  *
-  * The Request Sense command requests that the device server transfer sense data to the application client.
-  */
+  /**
+   * Request Sense
+   *
+   * The Request Sense command requests that the device server transfer sense data to the application client.
+   */
   byte buf[18] = {
     0x70,   //CheckCondition
     0,      //セグメント番号
