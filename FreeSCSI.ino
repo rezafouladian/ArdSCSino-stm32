@@ -125,7 +125,7 @@ SdFs SD;
 #define SD_CS     PA4      // SDCARD:CS
 #define LED       PC13     // LED
 
-// GPIOレジスタポート
+// GPIO Register Port
 #define PAREG GPIOA->regs
 #define PBREG GPIOB->regs
 
@@ -182,16 +182,16 @@ SdFs SD;
 #define HDIMG_FILE_256  "HDxx_256.HDS"  // BLOCKSIZE=256  のHDDイメージファイル
 #define HDIMG_FILE_512  "HDxx_512.HDS"  // BLOCKSIZE=512  のHDDイメージファイル名ベース
 #define HDIMG_FILE_1024 "HDxx_1024.HDS" // BLOCKSIZE=1024 のHDDイメージファイル
-#define HDIMG_ID_POS  2                 // ID数字を埋め込む位置
-#define HDIMG_LUN_POS 3                 // LUN数字を埋め込む位置
-#define MAX_FILE_PATH 32                // 最大ファイル名長
+#define HDIMG_ID_POS  2                 // ID Position
+#define HDIMG_LUN_POS 3                 // LUN Position
+#define MAX_FILE_PATH 32                // Maximum file name length
 
 // HDD image
 typedef struct hddimg_struct
 {
-  FsFile      m_file;                 // ファイルオブジェクト
-  uint64_t    m_fileSize;             // ファイルサイズ
-  size_t      m_blocksize;            // SCSI BLOCKサイズ
+  FsFile      m_file;                 // File object
+  uint64_t    m_fileSize;             // File size
+  size_t      m_blocksize;            // SCSI BLOCK size
 }HDDIMG;
 HDDIMG  img[NUM_SCSIID][NUM_SCSILUN]; // 最大個数分
 
@@ -327,26 +327,30 @@ bool hddimageOpen(HDDIMG *h,const char *image_name,int id,int lun,int blocksize)
 }
 
 /*
- * 初期化.
+ * Initialization routine
  *  バスの初期化、PINの向きの設定を行う
  */
 void setup()
 {
-  // PA15 / PB3 / PB4 が使えない
-  // JTAG デバッグ用に使われているからです。
+  /* 
+   * STM32 Specific - disableDebugPorts();
+   * 
+   * Disables JTAG debugging so PA15, PB3, and PB4 can be used.
+   */
   disableDebugPorts();
 
-  //シリアル初期化
+  
 #if DEBUG
+  // Serial initialization
   Serial.begin(9600);
   while (!Serial);
 #endif
 
-  //PINの初期化
+  // Pin initialization
   gpio_mode(LED, GPIO_OUTPUT_OD);
   gpio_write(LED, low);
 
-  //GPIO(SCSI BUS)初期化
+  // GPIO (SCSI Bus) Initialization
   //ポート設定レジスタ（下位）
 //  GPIOB->regs->CRL |= 0x000000008; // SET INPUT W/ PUPD on PAB-PB0
   //ポート設定レジスタ（上位）
@@ -355,13 +359,13 @@ void setup()
   // DB,DPは入力モード
   SCSI_DB_INPUT()
 
-  // 入力ポート
+  // Input ports
   gpio_mode(ATN, GPIO_INPUT_PU);
   gpio_mode(BSY, GPIO_INPUT_PU);
   gpio_mode(ACK, GPIO_INPUT_PU);
   gpio_mode(RST, GPIO_INPUT_PU);
   gpio_mode(SEL, GPIO_INPUT_PU);
-  // 出力ポート
+  // Output ports
   gpio_mode(MSG, GPIO_OUTPUT_OD);
   gpio_mode(CD,  GPIO_OUTPUT_OD);
   gpio_mode(REQ, GPIO_OUTPUT_OD);
@@ -384,7 +388,7 @@ void setup()
 
   //セクタデータオーバーランバイトの設定
   m_buf[MAX_BLOCKSIZE] = 0xff; // DB0 all off,DBP off
-  //HDイメージファイルオープン
+  // Open HDD image file
   scsi_id_mask = 0x00;
   for(int id=0;id<NUM_SCSIID;id++)
   {
@@ -449,7 +453,7 @@ void setup()
 }
 
 /*
- * 初期化失敗.
+ * Initialization failure
  */
 void onFalseInit(void)
 {
@@ -462,7 +466,7 @@ void onFalseInit(void)
 }
 
 /*
- * バスリセット割り込み.
+ * Bus reset interrupt
  */
 void onBusReset(void)
 {
@@ -490,7 +494,7 @@ void onBusReset(void)
 }
 
 /*
- * ハンドシェイクで読み込む.
+ * Handshake read
  */
 inline byte readHandshake(void)
 {
@@ -504,7 +508,7 @@ inline byte readHandshake(void)
 }
 
 /*
- * ハンドシェイクで書込み.
+ * Handshake write
  */
 inline void writeHandshake(byte d)
 {
