@@ -37,6 +37,15 @@
 #warning "warning USE_STM32_DMA"
 #endif
 
+/*
+ * Processor type
+ * Configure to compile for specific processors
+ * 
+ * 0 = STM32
+ * 1 = RP2040
+ */
+#define PROCESSOR_TYPE   0
+
 #define DEBUG            0      // Set to 1 for serial debug output
 
 #define SCSI_SELECT      0      // 0 for STANDARD
