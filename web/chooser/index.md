@@ -1,3 +1,7 @@
+---
+title: Chooser
+---
+
 # Chooser
 
 Not sure which variation to build? 
