@@ -1,5 +1,5 @@
 /*
- * SCSI_ID.h
+ * scsi_id.h
  */
 
 /*
