@@ -2,6 +2,8 @@
 
 This page is a work in progress.
 
+Code is currently not compilable.
+
 ## What is FreeSCSI?
 
 FreeSCSI is set of open hardware and software designs to replace obselete SCSI devices.
@@ -9,6 +11,12 @@ FreeSCSI is set of open hardware and software designs to replace obselete SCSI d
 # Getting started
 
 # Hardware versions
+
+# License
+
+FreeSCSI is licensed under the MIT License.
+
+For more information, please see [the License](https://raw.githubusercontent.com/rezafouladian/FreeSCSI/master/LICENSE).
 
 # Credits
 
