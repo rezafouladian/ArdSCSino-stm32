@@ -18,6 +18,8 @@ FreeSCSI is licensed under the MIT License.
 
 For more information, please see [the License](https://raw.githubusercontent.com/rezafouladian/FreeSCSI/master/LICENSE).
 
+# Alternatives
+
 # Credits
 
 ArdSCSino-stm32 とは たんぼ（TNB製作所）(https://twitter.com/h_koma2) さんが作成した ArdSCSino のSTM32版です<br>
