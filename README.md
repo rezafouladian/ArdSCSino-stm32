@@ -1,4 +1,4 @@
-[Home](https://freescsi.com) | [GitHub](https://github.com/rezafouladian/FreeSCSI/)
+[Home](https://freescsi.com) | [GitHub](https://github.com/rezafouladian/FreeSCSI/) | Chooser (coming soon)
 
 # FreeSCSI
 
